@@ -31,29 +31,23 @@ class Url
         // build remote URL
         $remoteUrl = implode('/', array_filter([$prefix, $imageSourceFull]));
 
-        // add HMAC sign key to preset when using imageproxy, see also https://github.com/willnorris/imageproxy#examples
-        if ($signatureKey) {
-            $preset .= ',s' . strtr(
-                    base64_encode(hash_hmac('sha256', $remoteUrl, $signatureKey, 1)),
-                    '/+',
-                    '_-'
-                );
-        }
-        return implode('/', array_filter([$baseUrl, $preset, $remoteUrl]));
+        return static::getSigner()->createUrl(
+            static::getBaseUrl(),
+            $preset,
+            $remoteUrl
+        );
+        
     }
 
-    /**
-     * if set, will be used as HMAC sign key for imageproxy preset
-     *
-     * @return string|null
-     */
-    protected static function getSignatureKey()
+    protected static function getSigner(): UrlGeneratorInterface
     {
-        if (!isset(static::$_paramCache['signatureKey'])) {
-            static::$_paramCache['signatureKey'] = getenv('IMAGEPROXY_SIGNATURE_KEY');
-        }
-        return static::$_paramCache['signatureKey'];
-    }
+       if(Yii::$container->has(UrlGeneratorInterface::class)) {
+           return Yii::$container->get(UrlGeneratorInterface::class);
+       }
+       return new HmacUrlSigner();
+    }    
+    
+   
 
     /**
      * baseUrl for image src urls
