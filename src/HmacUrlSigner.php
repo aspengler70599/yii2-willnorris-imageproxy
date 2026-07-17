@@ -5,8 +5,11 @@ namespace dmstr\willnorrisImageproxy;
 use dmstr\willnorrisImageproxy\UrlGeneratorInterface;
 
 
-class HmacUrlSigner implements UrlGenerator
+class HmacUrlSigner implements UrlGeneratorInterface
 {
+
+    protected static $_paramCache = [];
+    
     private ?string $signatureKey;
 
     public function __construct()

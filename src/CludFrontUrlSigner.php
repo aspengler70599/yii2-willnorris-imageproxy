@@ -10,7 +10,7 @@ class CludFrontUrlSigner implements UrlGeneratorInterface
     public function __construct(
         private CloudFrontClient $client,
         private string           $keyPairId,
-        private string           $privateKeyPath)
+        private string           $privateKey)
     {
     }
 
@@ -21,7 +21,7 @@ class CludFrontUrlSigner implements UrlGeneratorInterface
     {
        $url = implode('/', array_filter([
            $baseUrl,
-           $preset,
+        //   $preset,
            $remoteUrl
        ]));
 

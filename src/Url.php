@@ -26,7 +26,7 @@ class Url
         $baseUrl = static::getBaseUrl();
         $prefix = static::getPrefix();
         $imageSourceFull = $imageSource . static::getSuffix();
-        $signatureKey = static::getSignatureKey();
+     //   $signatureKey = static::getSignatureKey();
 
         // build remote URL
         $remoteUrl = implode('/', array_filter([$prefix, $imageSourceFull]));
@@ -36,7 +36,7 @@ class Url
             $preset,
             $remoteUrl
         );
-        
+
     }
 
     protected static function getSigner(): UrlGeneratorInterface
@@ -45,9 +45,9 @@ class Url
            return Yii::$container->get(UrlGeneratorInterface::class);
        }
        return new HmacUrlSigner();
-    }    
-    
-   
+    }
+
+
 
     /**
      * baseUrl for image src urls
